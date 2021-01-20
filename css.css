@@ -1,0 +1,13 @@
+body{
+    color: #444444;
+}
+input[type="range"]{
+    width: 400px;
+}
+input[type="number"]{
+    padding: 5px 5px;
+    border: 1px solid #DDDDDD;
+}
+.label{
+    padding: 4px 0px;
+}
