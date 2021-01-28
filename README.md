@@ -44,3 +44,11 @@ Untuk menjalankan simulator, silakan download versi 1.0.0 https://github.com/kam
 
 Extract file tersebut kemudian buka file index.html menggunakan browser. Silakan ubah Sampling Ratio dan Analog Phase. Perhatikan gambar yang ditampilkan.
 
+Frekuensi tertinggi tergantung dari sumber suara. Sebagai contoh, pada perekaman musik, frekuensi tertinggi dinetukan oleh instrumen apa saja yang akan direkam dan tergantung penyanyinya.
+
+ResearchGate (https://www.researchgate.net/figure/Frequency-ranges-of-several-musical-instruments-30_fig3_228446442) menampilkan frekuensi fundamental dan harmonik beberapa alat musik termasuk suara pria dan wanita. Frekuensi yang harus diperhatikan adalah frekuensi fundamental. Anda dapat menentukan harmonik ke berapa yang akan direkam. 
+
+Sebagai contoh: sebuah lagu dinyanyikan oleh penyanyi wanita diiringi oleh biola bass. Frekuensi fundamental tertinggi penyanyi wanita sekitar 3 kHz dan frekuensi fundamental tertinggi dari biola bass adalah 300 Hz. Dengan demikian, frekuensi fundamental tertinggi dari lagu tersebut adalah 3 kHz.
+
+Jika Anda ingin merekam hingga harmonik ke 3, maka frekuensi tertinggi dari harmonik adalah 12 kHz. Dengan frekuensi sebesar 12 kHz, maka perekaman dengan sampling rate sebesar 48 kHz telah memenuhi 4 kali frekuensi tertinggi dari informasi yang akan direkam. Tentu saja, perekaman dengan sampling rate 192 kHz akan memberikan suara yang sangat baik namun akan menyebabkan ukuran file menjadi sangat besar.
+
