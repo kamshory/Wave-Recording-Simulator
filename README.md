@@ -4,7 +4,7 @@ Teorema Nyquist menyatakan bahwa frequensi sampling minimal adalah 2 kali frekue
 
 Aliasing dalam hal ini adalah bergesernya frekuensi dari tinggi menjadi rendah akibat kesalahan pemilihan frekuensi sampling.
 
-Sebagai contoh adalah ketika frekuensi sampling adalah 1,8 kali frekuensi sinyal informasi. Maka frekuensi sinyal hasil sampling akan bergeser menjadi kurang dari sepertiganya.
+Sebagai contoh adalah ketika frekuensi sampling adalah 1,28 kali frekuensi sinyal informasi. Maka frekuensi sinyal hasil sampling akan bergeser menjadi kurang dari sepertiganya.
 
 ![enter image description here](https://raw.githubusercontent.com/kamshory/Wave-Recording-Simulator/main/image001.png)
 
