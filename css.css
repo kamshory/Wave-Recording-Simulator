@@ -1,13 +1,58 @@
 body{
     color: #444444;
+    padding: 0px;
+    margin: 0px;
+}
+.page{
+    width: 1200px;
+    margin: 0px auto;
+    position: relative;
+    padding: 20px 0;
+}
+.control{
+    position: relative;
 }
 input[type="range"]{
     width: 400px;
+    width: calc(100% - 5px);
+    box-sizing: border-box;
 }
 input[type="number"]{
     padding: 5px 5px;
     border: 1px solid #DDDDDD;
+    width: 100%;
+    box-sizing: border-box;
 }
 .label{
     padding: 4px 0px;
+}
+
+.row {
+    display:flex;
+    flex-direction:row;
+    justify-content: space-between;
+}
+
+.control-wrapper {
+    position: relative;
+    padding: 10px;
+    box-sizing: border-box;
+    margin-bottom: 20px;
+
+}
+.two-col .control-wrapper{
+    width: 48%;
+}
+.three-col .control-wrapper{
+    width: 32%;
+}
+.control-wrapper::before{
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background-color: #F4F4F4;
+    z-index: -1;
 }

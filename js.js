@@ -12,15 +12,22 @@ var phase = Math.PI/2;
  */
 var ratio = 2;
 
+/**
+ * Tension to smooth wave
+ */
+var tension = 1;
+
 var offsetX1 = 10;
 var offsetY1 = 100;
 var offsetY2 = 300;
+var offsetY3 = 500;
 var stepX = 1;
 var stepY = 80;
 var lineColor1 = '#EE0000';
 var lineColor2 = '#00EE00';
 var lineColor3 = '#0000EE';
 var lineColor4 = '#000000';
+var lineColor5 = '#0022FF';
 var canvas;
 
 window.onload = function()
@@ -42,6 +49,15 @@ window.onload = function()
         e.target.closest('.control-wrapper').querySelector('.value').innerHTML = ' ('+value+')';
         calcSamplingRate();
         calcFile();
+    });
+
+    var value3 = tension;
+    document.querySelector('#tension').value = value2;
+    document.querySelector('#tension').closest('.control-wrapper').querySelector('.value').innerHTML = ' ('+value3+')';
+    document.querySelector('#tension').addEventListener('change', function(e){
+        var value = parseFloat(e.target.value);
+        tension = value;
+        e.target.closest('.control-wrapper').querySelector('.value').innerHTML = ' ('+value+')';
     });
 
     document.querySelector('#maximum-frequency').addEventListener('change', function(e){
@@ -91,6 +107,7 @@ function drawAll()
     sampler(wave2, canvas, offsetX1, offsetY1, stepX, stepY, lineColor3, lineColor4);
     drawWave(wave2, canvas, offsetX1, offsetY1, stepX, stepY, lineColor2);
     drawWave(wave2, canvas, offsetX1, offsetY2, stepX, stepY, lineColor2);
+    drawWaveSmooth(wave2, canvas, offsetX1, offsetY3, stepX, stepY, lineColor5, tension);
     window.requestAnimationFrame(drawAll);
 }
 
@@ -165,6 +182,40 @@ function drawWave(wave, canvas, offsetX, offsetY, stepX, stepY, lineColor)
         ctx.lineTo(x, y);
     }
     ctx.stroke(); 
+}
+function drawWaveSmooth(wave, canvas, offsetX, offsetY, stepX, stepY, lineColor, tension) {
+    var length = wave.length;
+    var ctx = canvas.getContext('2d');
+    ctx.beginPath();
+    ctx.strokeStyle = lineColor;
+    var x = offsetX;
+    var y = offsetY - (wave[0].y * stepY);
+    ctx.moveTo(x, y);
+
+    var t = (tension != null) ? tension : 1;
+    var i;
+    for(i = 0; i<length; i++)
+    {
+        x = offsetX + (wave[i].x * stepX);
+        y = offsetY - (wave[i].y * stepY); 
+        wave[i].x = x;
+        wave[i].y = y;
+    }
+    for (i = 0; i < length - 1; i++) {
+        var p0 = (i > 0) ? wave[i - 1] : wave[0];
+        var p1 = wave[i];
+        var p2 = wave[i + 1];
+        var p3 = (i != length - 2) ? wave[i + 2] : p2;
+
+        var cp1x = p1.x + (p2.x - p0.x) / 6 * t;
+        var cp1y = p1.y + (p2.y - p0.y) / 6 * t;
+
+        var cp2x = p2.x - (p3.x - p1.x) / 6 * t;
+        var cp2y = p2.y - (p3.y - p1.y) / 6 * t;
+
+        ctx.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, p2.x, p2.y);
+    }
+    ctx.stroke();
 }
 /**
  * Draw sampler

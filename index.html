@@ -9,38 +9,52 @@
     <script src="js.js"></script>
 </head>
 <body>
-    <div class="control-wrapper">
-        <div class="label">Sampling Ratio <span class="value"></span></div>
-        <div class="control"><input type="range" id="ratio" min="0.5" max="20" step="0.01"></div>
+    <div class="page">
+        <div class="row three-col">
+            <div class="control-wrapper">
+                <div class="label">Sampling Ratio <span class="value"></span></div>
+                <div class="control"><input type="range" id="ratio" min="0.5" max="20" step="0.01"></div>
+            </div>
+            <div class="control-wrapper">
+                <div class="label">Analog Phase <span class="value"></span></div>
+                <div class="control"><input type="range" id="phase" min="0" max="720" step="1"></div>
+            </div>    
+            <div class="control-wrapper">
+                <div class="label">Tension <span class="value"></span></div>
+                <div class="control"><input type="range" id="tension" min="0" max="1" step="0.01"></div>
+            </div>    
+        </div>   
+    
+        <canvas id="canvas1" width="1200" height="600"></canvas>
+        <div class="row three-col">
+            <div class="control-wrapper">
+                <div class="label">Maximum Frequency (Hz)</div>
+                <div class="control"><input type="number" id="maximum-frequency" value="20000" step="any"></div>
+            </div>
+                <div class="control-wrapper">
+                <div class="label">Sampling Rate</div>
+                <div class="control"><input type="number" id="sampling-rate" step="any"></div>
+            </div>
+            <div class="control-wrapper">
+                <div class="label">Bit Depth (Bits)</div>
+                <div class="control"><input type="number" id="bit-depth" value="16" step="any"></div>
+            </div>
+        </div>
+        <div class="row three-col">
+            <div class="control-wrapper">
+                <div class="label">Number of Channel</div>
+                <div class="control"><input type="number" id="number-of-channel" value="2"></div>
+            </div>    
+            <div class="control-wrapper">
+                <div class="label">Duration (Seconds)</div>
+                <div class="control"><input type="number" id="duration" value="300" step="any"></div>
+            </div>
+            <div class="control-wrapper">
+                <div class="label">WAV File Size (Exclude Header)</div>
+                <div class="control"><input type="number" id="file-size"></div>
+            </div>    
+        </div>
     </div>
-    <div class="control-wrapper">
-        <div class="label">Analog Phase <span class="value"></span></div>
-        <div class="control"><input type="range" id="phase" min="0" max="720" step="1"></div>
-    </div>
-    <canvas id="canvas1" width="1200" height="400"></canvas>
-    <div class="control-warpper">
-        <div class="label">Maximum Frequency (Hz)</div>
-        <div class="control"><input type="number" id="maximum-frequency" value="20000" step="any"></div>
-    </div>
-    <div class="control-warpper">
-        <div class="label">Sampling Rate</div>
-        <div class="control"><input type="number" id="sampling-rate" step="any"></div>
-    </div>
-    <div class="control-warpper">
-        <div class="label">Bit Depth (Bits)</div>
-        <div class="control"><input type="number" id="bit-depth" value="16" step="any"></div>
-    </div>
-    <div class="control-warpper">
-        <div class="label">Number of Channel</div>
-        <div class="control"><input type="number" id="number-of-channel" value="2"></div>
-    </div>
-    <div class="control-warpper">
-        <div class="label">Duration (Seconds)</div>
-        <div class="control"><input type="number" id="duration" value="300" step="any"></div>
-    </div>
-    <div class="control-warpper">
-        <div class="label">WAV File Size (Exclude Header)</div>
-        <div class="control"><input type="number" id="file-size"></div>
-    </div>
+    
 </body>
 </html>
