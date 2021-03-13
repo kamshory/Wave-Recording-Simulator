@@ -136,9 +136,9 @@ function drawAll()
 
 /**
  * Sampling wave
- * @param {object} wave 
- * @param {number} lResolution 
- * @param {number} lRatio 
+ * @param {object} wave Wave
+ * @param {number} lResolution Resolution 
+ * @param {number} lRatio Sampling ratio
  */
 function sampling(wave, lResolution, lRatio)
 {
@@ -156,9 +156,9 @@ function sampling(wave, lResolution, lRatio)
 }
 /**
  * Create wave data
- * @param {number} lPeriod 
- * @param {number} lPhase 
- * @param {number} lResolution 
+ * @param {number} lPeriod Period
+ * @param {number} lPhase Phase
+ * @param {number} lResolution Resolution
  */
 function createWave(lPeriod, lPhase, lResolution)
 {
@@ -181,13 +181,13 @@ function createWave(lPeriod, lPhase, lResolution)
 
 /**
  * Draw signal
- * @param {object} wave 
- * @param {object} lCanvas 
- * @param {number} offsetX 
- * @param {number} offsetY 
- * @param {number} lStepX 
- * @param {number} lStepY 
- * @param {string} lineColor 
+ * @param {object} wave Wave
+ * @param {object} lCanvas Canvas
+ * @param {number} offsetX Offset X
+ * @param {number} offsetY Offset Y
+ * @param {number} lStepX Step X
+ * @param {number} lStepY Step Y
+ * @param {string} lineColor Line color
  */
 function drawWave(wave, lCanvas, offsetX, offsetY, lStepX, lStepY, lineColor, drawPoint, lPointColor)
 {
@@ -214,16 +214,16 @@ function drawWave(wave, lCanvas, offsetX, offsetY, lStepX, lStepY, lineColor, dr
 
 /**
  * Draw signal with Bezier
- * @param {object} wave 
- * @param {object} lCanvas 
- * @param {number} offsetX 
- * @param {number} offsetY 
- * @param {number} lStepX 
- * @param {number} lStepY 
- * @param {string} lineColor 
- * @param {number} lTension 
- * @param {boolean} drawPoint 
- * @param {string} lPointColor 
+ * @param {object} wave Wave
+ * @param {object} lCanvas Canvas
+ * @param {number} offsetX Offset X
+ * @param {number} offsetY Offset Y
+ * @param {number} lStepX Step X
+ * @param {number} lStepY Step Y
+ * @param {string} lineColor Line color
+ * @param {number} lTension Bezier tension
+ * @param {boolean} drawPoint Draw point
+ * @param {string} lPointColor Point color
  */
 function drawWaveBezier(wave, lCanvas, offsetX, offsetY, lStepX, lStepY, lineColor, lTension, drawPoint, lPointColor) 
 {
@@ -268,13 +268,13 @@ function drawWaveBezier(wave, lCanvas, offsetX, offsetY, lStepX, lStepY, lineCol
 
 /**
  * Draw points
- * @param {object} wave 
- * @param {object} lCanvas 
- * @param {number} offsetX 
- * @param {number} offsetY 
- * @param {number} lStepX 
- * @param {number} lStepY 
- * @param {string} lPointColor 
+ * @param {object} wave Wave
+ * @param {object} lCanvas Canvas
+ * @param {number} offsetX Offset X
+ * @param {number} offsetY Offset Y
+ * @param {number} lStepX Step X
+ * @param {number} lStepY Step Y
+ * @param {string} lPointColor Point color
  */
 function drawPoints(wave, lCanvas, offsetX, offsetY, lStepX, lStepY, lPointColor)
 {
@@ -293,10 +293,10 @@ function drawPoints(wave, lCanvas, offsetX, offsetY, lStepX, lStepY, lPointColor
 
 /**
  * Draw point with coordinate
- * @param {object} lCanvas 
- * @param {number} x 
- * @param {number} y 
- * @param {string} lPointColor 
+ * @param {object} lCanvas Canvas
+ * @param {number} x Coordinate X
+ * @param {number} y Coordinate Y
+ * @param {string} lPointColor Point color
  */
 function drawCoordinates(lCanvas, x, y, lPointColor)
 {
@@ -310,16 +310,17 @@ function drawCoordinates(lCanvas, x, y, lPointColor)
 
 /**
  * Draw sampler
- * @param {object} wave 
- * @param {object} lCanvas 
- * @param {number} offsetX 
- * @param {number} offsetY 
- * @param {number} lStepX 
- * @param {number} lStepY 
- * @param {string} lineColor1 
- * @param {string} lLineColor2 
+ * @param {object} wave Wave
+ * @param {object} lCanvas Canvas
+ * @param {number} offsetX Offset X
+ * @param {number} offsetY Offset Y
+ * @param {number} lStepX Step X
+ * @param {number} lStepY Step Y
+ * @param {string} lLineColor1 Line color 1 to draw sample
+ * @param {string} lLineColor2 Line color 2 to drav horizontal line
+ * @param {boolean} unsignedData Unsigned sample value
  */
-function sampler(wave, lCanvas, offsetX, offsetY, lStepX, lStepY, lLineColor, lLineColor2, unsignedData)
+function sampler(wave, lCanvas, offsetX, offsetY, lStepX, lStepY, lLineColor1, lLineColor2, unsignedData)
 {
     var length = wave.length;
     var ctx = lCanvas.getContext('2d');
@@ -330,7 +331,7 @@ function sampler(wave, lCanvas, offsetX, offsetY, lStepX, lStepY, lLineColor, lL
     if(unsignedData)
     {
         ctx.beginPath();
-        ctx.strokeStyle = lLineColor;
+        ctx.strokeStyle = lLineColor1;
         for(i = 0; i<length; i++)
         {
             x = offsetX + (wave[i].x * lStepX);
@@ -351,7 +352,7 @@ function sampler(wave, lCanvas, offsetX, offsetY, lStepX, lStepY, lLineColor, lL
     {
 
         ctx.beginPath();
-        ctx.strokeStyle = lLineColor;
+        ctx.strokeStyle = lLineColor1;
         for(i = 0; i<length; i++)
         {
             x = offsetX + (wave[i].x * lStepX);
@@ -368,6 +369,59 @@ function sampler(wave, lCanvas, offsetX, offsetY, lStepX, lStepY, lLineColor, lL
         ctx.lineTo(x, offsetY);
         ctx.stroke(); 
     }
+}
+
+/**
+ * Validate value
+ * @param {object} elem Document element
+ */
+function validateValue(elem)
+{
+    var step = elem.getAttribute('step');
+    var min = elem.getAttribute('min');
+    var max = elem.getAttribute('max');
+    var val = elem.value;
+    var minVal;
+    var maxVal;
+    var stepVal;
+    if(step != 'any' && min != null && max != null)
+    {
+        minVal = parseInt(min);
+        maxVal = parseInt(max);
+        stepVal = parseInt(step);
+        if(val % step != 0)
+        {
+            val = val - (val % stepVal);
+        }
+        if(val < minVal)
+        {
+            val = minVal;
+        }
+        if(val > maxVal)
+        {
+            val = maxVal;
+        }
+    }
+    if(step == 'any')
+    {
+        if(min != null)
+        {
+            minVal = parseInt(min);
+            if(val < minVal)
+            {
+                val = minVal;
+            }
+        }
+        if(max != null)
+        {
+            maxVal = parseInt(max);
+            if(val > maxVal)
+            {
+                val = maxVal;
+            }
+        }
+    }
+    elem.value = val;
 }
 
 window.onload = function()
@@ -437,6 +491,7 @@ window.onload = function()
     });
 
     document.querySelector('#maximum-frequency').addEventListener('change', function(e){
+        validateValue(e.target);
         calcSamplingRate();
         calcFile();
     });
@@ -444,12 +499,15 @@ window.onload = function()
         calcFile();
     });
     document.querySelector('#bit-depth').addEventListener('change', function(e){
+        validateValue(e.target);
         calcFile();
     });
     document.querySelector('#number-of-channel').addEventListener('change', function(e){
+        validateValue(e.target);
         calcFile();
     });
     document.querySelector('#sampling-rate').addEventListener('change', function(e){
+        validateValue(e.target);
         calcFile();
     });
     calcSamplingRate();

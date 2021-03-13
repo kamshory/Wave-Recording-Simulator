@@ -37,29 +37,29 @@
         <div class="row three-col">
             <div class="control-wrapper">
                 <div class="label">Maximum Frequency (Hz)</div>
-                <div class="control"><input type="number" id="maximum-frequency" value="20000" step="any"></div>
+                <div class="control"><input type="number" id="maximum-frequency" value="20000" step="any" min="15" max="22000"></div>
             </div>
                 <div class="control-wrapper">
                 <div class="label">Sampling Rate (Hz)</div>
-                <div class="control"><input type="number" id="sampling-rate" step="any"></div>
+                <div class="control"><input type="number" id="sampling-rate" step="any" min="60"></div>
             </div>
             <div class="control-wrapper">
                 <div class="label">Bit Depth (Bits)</div>
-                <div class="control"><input type="number" id="bit-depth" value="16" step="any"></div>
+                <div class="control"><input type="number" id="bit-depth" value="16" step="8" min="8" max="24"></div>
             </div>
         </div>
         <div class="row three-col">
             <div class="control-wrapper">
                 <div class="label">Number of Channel</div>
-                <div class="control"><input type="number" id="number-of-channel" value="2"></div>
+                <div class="control"><input type="number" id="number-of-channel" value="2" step="1" min="1" max="64"></div>
             </div>    
             <div class="control-wrapper">
                 <div class="label">Duration (Seconds)</div>
-                <div class="control"><input type="number" id="duration" value="300" step="any"></div>
+                <div class="control"><input type="number" id="duration" value="300" step="any" min="0"></div>
             </div>
             <div class="control-wrapper">
                 <div class="label">WAV File Size (Exclude Header)</div>
-                <div class="control"><input type="number" id="file-size"></div>
+                <div class="control"><input type="number" id="file-size" readonly></div>
             </div>    
         </div>
     </div>
