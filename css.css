@@ -1,13 +1,22 @@
 body{
-    color: #444444;
+    color: #555555;
     padding: 0px;
     margin: 0px;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 11pt;
 }
 .page{
     width: 1200px;
     margin: 0px auto;
     position: relative;
-    padding: 20px 0;
+    padding: 10px 0 0 0;
+}
+.selector{
+    text-align: center;
+}
+.selector label{
+    display: inline-block;
+    margin: 0 5px;
 }
 .control{
     position: relative;
@@ -35,24 +44,15 @@ input[type="number"]{
 
 .control-wrapper {
     position: relative;
-    padding: 10px;
+    padding: 8px 12px 12px 12px;
     box-sizing: border-box;
-    margin-bottom: 20px;
-
+    margin-bottom: 12px;
+    border-radius: 3px;
+    background-color: #F4F4F4;
 }
 .two-col .control-wrapper{
     width: 48%;
 }
 .three-col .control-wrapper{
     width: 32%;
-}
-.control-wrapper::before{
-    content: "";
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    background-color: #F4F4F4;
-    z-index: -1;
 }
