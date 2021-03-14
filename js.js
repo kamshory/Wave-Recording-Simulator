@@ -1,4 +1,4 @@
-var period = 5;
+var period = 8;
 var resolution = 256;
 
 /**
@@ -109,6 +109,7 @@ function calcFile(){
  */
 function drawAll()
 {
+    canvas.width = document.querySelector('.page').offsetWidth;
     var ctx = canvas.getContext('2d');
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     var wave1 = createWave(period, phase, resolution);

@@ -6,11 +6,33 @@ body{
     font-size: 11pt;
 }
 .page{
-    width: 1200px;
+    width: 100%;
+    min-width: 800px;
     margin: 0px auto;
     position: relative;
     padding: 10px 0 0 0;
 }
+@media screen and (max-width: 800px){
+    .page{
+        width: 100%;
+    }        
+}
+@media screen and (min-width: 1366px) and (max-width: 1599px){
+    .page{
+        width: 1200px;
+    }        
+}
+@media screen and (min-width: 1600px) and (max-width: 1800px){
+    .page{
+        width: 1500px;
+    }        
+}
+@media screen and (min-width: 1800px){
+    .page{
+        width: 1780px;
+    }        
+}
+
 .selector{
     text-align: center;
 }
@@ -33,6 +55,7 @@ input[type="number"]{
     box-sizing: border-box;
     background-color: #FAFAFA;
     color: #666666;
+    transition: all ease-in-out 0.24s;
 }
 input[type="number"]:focus, input[type="number"]:active{
     outline: none;  
