@@ -115,7 +115,7 @@ function drawAll()
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     var wave1 = createWave(period, phase, resolution);
     var wave2 = sampling(wave1, resolution, ratio);
-    var wave1Copy = createWave(period, phase, resolution);
+    var wave1Copy = JSON.parse(JSON.stringify(wave1));
 
     if(drawori)
     {
