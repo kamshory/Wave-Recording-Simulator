@@ -30,7 +30,6 @@ var lineColor4 = '#222222';
 var lineColor5 = '#2222FF';
 var pointColor5 = '#0000EE';
 var canvas;
-
 var unsigned = false;
 var drawori = true;
 var drawsampling = true;
@@ -42,19 +41,19 @@ var drawcompararison = false;
 /**
  * Save data to local storage
  * @param {string} key Key
- * @param {boolean} val Value
+ * @param {boolean} value Value
  */
-function setState(key, val)
+function setState(key, value)
 {
-     var keyStorage = 'planetwave_'+key;
-     if(val)
-     {
-         window.localStorage.setItem(keyStorage, '1');
-     }
-     else
-     {
-         window.localStorage.setItem(keyStorage, '0');
-     }
+    var keyStorage = 'planetwave_'+key;
+    if(value)
+    {
+        window.localStorage.setItem(keyStorage, '1');
+    }
+    else
+    {
+        window.localStorage.setItem(keyStorage, '0');
+    }
 }
  
 /**
@@ -64,23 +63,23 @@ function setState(key, val)
  */
 function getState(key, val)
 {
-     var saved = false;
-     var keyStorage = 'planetwave_'+key;
-     if(window.localStorage.getItem(keyStorage) != null)
-     {
-         var value = window.localStorage.getItem(keyStorage);
-         if(value == '1')
-         {
-             saved = true;
-         }
-     }
-     else
-     {
-         saved = val;
-         document.querySelector('#'+key).checked = val;
-     }
-     document.querySelector('#'+key).checked = saved;
-     return saved;
+    var saved = false;
+    var keyStorage = 'planetwave_'+key;
+    if(window.localStorage.getItem(keyStorage) != null)
+    {
+        var value = window.localStorage.getItem(keyStorage);
+        if(value == '1')
+        {
+            saved = true;
+        }
+    }
+    else
+    {
+        saved = val;
+        document.querySelector('#'+key).checked = val;
+    }
+    document.querySelector('#'+key).checked = saved;
+    return saved;
 }
 
 /**
@@ -96,7 +95,8 @@ function calcSamplingRate()
 /**
  * Calculate file size
  */
-function calcFile(){
+function calcFile()
+{
     var duration = document.querySelector('#duration').value;
     var bitDepth = document.querySelector('#bit-depth').value;
     var channel = document.querySelector('#number-of-channel').value;
@@ -116,7 +116,6 @@ function drawAll()
     var wave1 = createWave(period, phase, resolution);
     var wave2 = sampling(wave1, resolution, ratio);
     var wave1Copy = JSON.parse(JSON.stringify(wave1));
-
     if(drawori)
     {
         drawWave(wave1, canvas, offsetX1, offsetY1, stepX, stepY, lineColor1);
@@ -202,21 +201,23 @@ function drawWave(wave, lCanvas, offsetX, offsetY, lStepX, lStepY, lineColor, dr
     {
         drawPoints(wave, lCanvas, offsetX, offsetY, lStepX, lStepY, lPointColor);
     }
-    var length = wave.length;
-    var ctx = lCanvas.getContext('2d');
-    ctx.beginPath();
-    ctx.strokeStyle = lineColor;
-    var x = offsetX;
-    var y = offsetY - (wave[0].y * lStepY);
-    ctx.moveTo(x, y);
-
-    for(var i = 1; i<length; i++)
+    if(wave.length > 1)
     {
-        x = offsetX + (wave[i].x * lStepX);
-        y = offsetY - (wave[i].y * lStepY);     
-        ctx.lineTo(x, y);
+        var length = wave.length;
+        var ctx = lCanvas.getContext('2d');
+        ctx.beginPath();
+        ctx.strokeStyle = lineColor;
+        var x = offsetX;
+        var y = offsetY - (wave[0].y * lStepY);
+        ctx.moveTo(x, y);
+        for(var i = 1; i<length; i++)
+        {
+            x = offsetX + (wave[i].x * lStepX);
+            y = offsetY - (wave[i].y * lStepY);     
+            ctx.lineTo(x, y);
+        }
+        ctx.stroke(); 
     }
-    ctx.stroke(); 
 }
 
 /**
@@ -238,39 +239,41 @@ function drawWaveBezier(wave, lCanvas, offsetX, offsetY, lStepX, lStepY, lineCol
     {
         drawPoints(wave, lCanvas, offsetX, offsetY, lStepX, lStepY, lPointColor);
     }
-    var length = wave.length;
-    var ctx = lCanvas.getContext('2d');
-    ctx.beginPath();
-    ctx.strokeStyle = lineColor;
-    var x = offsetX;
-    var y = offsetY - (wave[0].y * lStepY);
-    ctx.moveTo(x, y);
-
-    var t = (lTension != null) ? lTension : 1;
-    var i;
-    for(i = 0; i<length; i++)
+    if(wave.length > 1)
     {
-        x = offsetX + (wave[i].x * lStepX);
-        y = offsetY - (wave[i].y * lStepY); 
-        wave[i].x = x;
-        wave[i].y = y;
+        var length = wave.length;
+        var ctx = lCanvas.getContext('2d');
+        ctx.beginPath();
+        ctx.strokeStyle = lineColor;
+        var x = offsetX;
+        var y = offsetY - (wave[0].y * lStepY);
+        ctx.moveTo(x, y);
+        var t = (lTension != null) ? lTension : 1;
+        var i;
+        for(i = 0; i<length; i++)
+        {
+            x = offsetX + (wave[i].x * lStepX);
+            y = offsetY - (wave[i].y * lStepY); 
+            wave[i].x = x;
+            wave[i].y = y;
+        }
+        for (i = 0; i < length - 1; i++) 
+        {
+            var p0 = (i > 0) ? wave[i - 1] : wave[0];
+            var p1 = wave[i];
+            var p2 = wave[i + 1];
+            var p3 = (i != length - 2) ? wave[i + 2] : p2;
+
+            var cp1x = p1.x + (p2.x - p0.x) / 6 * t;
+            var cp1y = p1.y + (p2.y - p0.y) / 6 * t;
+
+            var cp2x = p2.x - (p3.x - p1.x) / 6 * t;
+            var cp2y = p2.y - (p3.y - p1.y) / 6 * t;
+
+            ctx.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, p2.x, p2.y);
+        }
+        ctx.stroke();
     }
-    for (i = 0; i < length - 1; i++) 
-    {
-        var p0 = (i > 0) ? wave[i - 1] : wave[0];
-        var p1 = wave[i];
-        var p2 = wave[i + 1];
-        var p3 = (i != length - 2) ? wave[i + 2] : p2;
-
-        var cp1x = p1.x + (p2.x - p0.x) / 6 * t;
-        var cp1y = p1.y + (p2.y - p0.y) / 6 * t;
-
-        var cp2x = p2.x - (p3.x - p1.x) / 6 * t;
-        var cp2y = p2.y - (p3.y - p1.y) / 6 * t;
-
-        ctx.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, p2.x, p2.y);
-    }
-    ctx.stroke();
 }
 
 /**
@@ -285,16 +288,18 @@ function drawWaveBezier(wave, lCanvas, offsetX, offsetY, lStepX, lStepY, lineCol
  */
 function drawPoints(wave, lCanvas, offsetX, offsetY, lStepX, lStepY, lPointColor)
 {
-    var length = wave.length;
-    var x = offsetX;
-    var y = offsetY - (wave[0].y * lStepY);
-    drawCoordinates(lCanvas, x, y, lPointColor);
-
-    for(var i = 1; i<length; i++)
+    if(wave.length > 1)
     {
-        x = offsetX + (wave[i].x * lStepX);
-        y = offsetY - (wave[i].y * lStepY);     
+        var length = wave.length;
+        var x = offsetX;
+        var y = offsetY - (wave[0].y * lStepY);
         drawCoordinates(lCanvas, x, y, lPointColor);
+        for(var i = 1; i<length; i++)
+        {
+            x = offsetX + (wave[i].x * lStepX);
+            y = offsetY - (wave[i].y * lStepY);     
+            drawCoordinates(lCanvas, x, y, lPointColor);
+        }
     }
 }
 
@@ -334,7 +339,6 @@ function sampler(wave, lCanvas, offsetX, offsetY, lStepX, lStepY, lLineColor1, l
     var x = offsetX;
     var y = offsetY - (wave[0].y * lStepY);
     var i;
-
     if(unsignedData)
     {
         ctx.beginPath();
@@ -357,7 +361,6 @@ function sampler(wave, lCanvas, offsetX, offsetY, lStepX, lStepY, lLineColor1, l
         }
     else
     {
-
         ctx.beginPath();
         ctx.strokeStyle = lLineColor1;
         for(i = 0; i<length; i++)
