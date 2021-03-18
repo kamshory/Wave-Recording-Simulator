@@ -37,6 +37,7 @@ var drawsampling = true;
 var drawresult = true;
 var drawbezierresult = true;
 var drawpoint = false;
+var drawcompararison = false;
 
 /**
  * Save data to local storage
@@ -114,6 +115,7 @@ function drawAll()
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     var wave1 = createWave(period, phase, resolution);
     var wave2 = sampling(wave1, resolution, ratio);
+    var wave1Copy = createWave(period, phase, resolution);
 
     if(drawori)
     {
@@ -131,6 +133,10 @@ function drawAll()
     if(drawbezierresult)
     {
         drawWaveBezier(wave2, canvas, offsetX1, offsetY3, stepX, stepY, lineColor5, tension, drawpoint, pointColor5);
+        if (drawcompararison) 
+        {
+            drawWave(wave1Copy, canvas, offsetX1, offsetY3, stepX, stepY, lineColor1);
+        }
     }
     window.requestAnimationFrame(drawAll);
 }
@@ -462,7 +468,14 @@ window.onload = function()
         drawpoint = e.target.checked;
         setState('drawpoint', drawpoint);
     });
-    
+
+    drawcompararison = getState('drawcompararison', drawcompararison);
+    document.querySelector('#drawcompararison').addEventListener('change', function (e) {
+        drawcompararison = e.target.checked;
+        setState('drawcompararison', drawcompararison);
+    });
+
+
     var value1 = 180 * phase / Math.PI;  
     document.querySelector('#phase').value = value1;
     document.querySelector('#phase').closest('.control-wrapper').querySelector('.value').innerHTML = ' ('+value1+')';
