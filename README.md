@@ -40,7 +40,7 @@ Ketika frekuensi sampling dinaikkan menjadi 8 kali frekuensi informasi, bentuk s
 
 Kesimpulan dari percobaan ini adalah: Teorema Nyiquist menyatakan bahwa frekuensi sampling minimal adalah 2 kali frekuensi tertinggi dari sinyal informasi untuk menghindari terjadinya aliasing. Rasio 2 kali ini bukanlah untuk menentukan frekuensi ideal yang dapat digunakan untuk menyampling sinyal informasi karena pada kenyataannya, fasa dari sinyal informasi tidak dapat dikendalikan oleh penyampling. Frekuensi sampling sebesar 4 kali frekuensi sinyal informasi dapat dipilih sebagai pilihan terburuk. Untuk mendapatkan hasil yang lebih baik, gunakan frekuensi sampling yang lebih tinggi.
 
-Untuk menjalankan simulator, silakan download versi 3.0.0 https://github.com/kamshory/Wave-Recording-Simulator/archive/3.0.0.zip
+Untuk menjalankan simulator, silakan download versi 3.0.0 https://github.com/kamshory/Wave-Recording-Simulator/archive/4.0.0.zip
 
 Extract file tersebut kemudian buka file index.html menggunakan browser. Silakan ubah Sampling Ratio dan Analog Phase. Perhatikan gambar yang ditampilkan.
 
