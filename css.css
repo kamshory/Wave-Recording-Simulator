@@ -33,10 +33,12 @@ body{
     }        
 }
 
-.selector{
+.selector-area, .source-area{
     text-align: center;
+    display: block;
+    padding: 5px 0;
 }
-.selector label{
+.selector-area label, .source-area label{
     display: inline-block;
     margin: 0 5px;
 }
@@ -48,20 +50,25 @@ input[type="range"]{
     width: calc(100% - 5px);
     box-sizing: border-box;
 }
-input[type="number"]{
+
+input[type="number"], select{
     padding: 5px 5px;
     border: 1px solid #DDDDDD;
-    width: 100%;
     box-sizing: border-box;
-    background-color: #FAFAFA;
-    color: #666666;
+    color: #333333;
+    background-color: #FFFFFF;
     transition: all ease-in-out 0.24s;
 }
-input[type="number"]:focus, input[type="number"]:active{
+input[type="number"]:focus, input[type="number"]:active, select:focus select:active{
     outline: none;  
     box-shadow: 0px 0px 3px #DDDDDD;  
     background-color: #FFFFFF;
     color: #333333;
+}
+.control input[type="number"]{
+    width: 100%;
+    color: #666666;
+    background-color: #FAFAFA;
 }
 .label{
     padding: 4px 0px;

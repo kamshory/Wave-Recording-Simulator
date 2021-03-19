@@ -1,10 +1,13 @@
-var period = 8;
-var resolution = 256;
+var period1 = 8;
+var period2 = 5;
+var resolution1 = 256;
+var resolution2 = 410;
 
 /**
  * Phase for analog signal
  */
-var phase = Math.PI/2;
+ var phase1 = Math.PI/2;
+ var phase2 = Math.PI/2;
 
 /**
  * Ratio between sampling rate to highest analog frequency
@@ -15,28 +18,36 @@ var ratio = 2;
  * Tension to smooth wave
  */
 var tension = 1;
-
+var amplitude1 = 1;
+var amplitude2 = 0.3;
 var offsetX1 = 10;
 var offsetY1 = 100;
 var offsetY2 = 300;
 var offsetY3 = 500;
 var stepX = 1;
 var stepY = 80;
-var lineColor1 = '#EE0000';
-var lineColor2 = '#22FF22';
-var pointColor2 = '#00DD00';
-var lineColor3 = '#0000DD';
-var lineColor4 = '#222222';
-var lineColor5 = '#2222FF';
-var pointColor5 = '#0000EE';
+var colorRed = '#EE0000';
+var colorGreen = '#22FF22';
+var colorDarkGreen = '#00DD00';
+var colorDarkBlue = '#0000DD';
+var colorLightBlue = '#2222FF';
+var colorBlue = '#0000EE';
+var colorBlack = '#222222';
+var colorGrey = '#999999';
+var colorBrown = '#CC5500';
+
 var canvas;
 var unsigned = false;
+var selectedsource = 'main';
+
 var drawori = true;
 var drawsampling = true;
 var drawresult = true;
 var drawbezierresult = true;
 var drawpoint = false;
 var drawcompararison = false;
+var drawsignal1 = false;
+var drawsignal2 = false;
 
 /**
  * Save data to local storage
@@ -54,6 +65,17 @@ function setState(key, value)
     {
         window.localStorage.setItem(keyStorage, '0');
     }
+}
+
+/**
+ * Save data to local storage
+ * @param {string} key Key
+ * @param {boolean} value Value
+ */
+function setValue(key, value)
+{
+    var keyStorage = 'planetwave_'+key;
+    window.localStorage.setItem(keyStorage, value);
 }
  
 /**
@@ -83,6 +105,27 @@ function getState(key, val)
 }
 
 /**
+ * Get data from local storage
+ * @param {string} key Key
+ * @param {boolean} val Value
+ */
+function getValue(key, val)
+{
+    var saved = '';
+    var keyStorage = 'planetwave_'+key;
+    if(window.localStorage.getItem(keyStorage) != null)
+    {
+        saved = window.localStorage.getItem(keyStorage);
+    }
+    else
+    {
+        saved = val;
+    }
+    document.querySelector('#'+key).value = saved;
+    return saved;
+}
+
+/**
  * Calculate sampling rate
  */
 function calcSamplingRate()
@@ -95,7 +138,7 @@ function calcSamplingRate()
 /**
  * Calculate file size
  */
-function calcFile()
+function calculateFile()
 {
     var duration = document.querySelector('#duration').value;
     var bitDepth = document.querySelector('#bit-depth').value;
@@ -106,67 +149,101 @@ function calcFile()
 }
 
 /**
- * Draw all curve
+ * Copy signal
+ * @param {object} signal Objcet to be copied
+ * @returns Object
+ */
+function copySignal(signal)
+{
+    return JSON.parse(JSON.stringify(signal));
+}
+
+/**
+ * Draw all curves and points
  */
 function drawAll()
 {
     canvas.width = document.querySelector('.page').offsetWidth;
     var ctx = canvas.getContext('2d');
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    var wave1 = createWave(period, phase, resolution);
-    var wave2 = sampling(wave1, resolution, ratio);
-    var wave1Copy = JSON.parse(JSON.stringify(wave1));
+    var signal1 = createSignal(amplitude1, period1, phase1, resolution1);
+    var signal2 = createSignal(amplitude2, period2, phase2, resolution2);
+
+    var original;
+    if(selectedsource == 'noise03')
+    {
+        original = copySignal(signal2);
+    }
+    else if(selectedsource == 'combination')
+    {
+        original = combineSignal(signal1, signal2);
+    }
+    else
+    {
+        original = copySignal(signal1);
+    }
+    var sampled = sampling(original, resolution1, ratio);
+    var originalCopy = copySignal(original);
+    if(drawsignal1)
+    {
+        drawSignal(signal1, canvas, offsetX1, offsetY1, stepX, stepY, colorBrown);
+    }
+    if(drawsignal2)
+    {
+        drawSignal(signal2, canvas, offsetX1, offsetY1, stepX, stepY, colorGrey);
+    }
     if(drawori)
     {
-        drawWave(wave1, canvas, offsetX1, offsetY1, stepX, stepY, lineColor1);
+        drawSignal(original, canvas, offsetX1, offsetY1, stepX, stepY, colorRed);
     }
     if(drawsampling)
     {
-        sampler(wave2, canvas, offsetX1, offsetY1, stepX, stepY, lineColor3, lineColor4, unsigned);
+        sampler(sampled, canvas, offsetX1, offsetY1, stepX, stepY, colorDarkBlue, colorBlack, unsigned);
     }
     if(drawresult)
     {
-        drawWave(wave2, canvas, offsetX1, offsetY1, stepX, stepY, lineColor2);
-        drawWave(wave2, canvas, offsetX1, offsetY2, stepX, stepY, lineColor2, drawpoint, pointColor2);
+        drawSignal(sampled, canvas, offsetX1, offsetY1, stepX, stepY, colorGreen);
+        drawSignal(sampled, canvas, offsetX1, offsetY2, stepX, stepY, colorGreen, drawpoint, colorDarkGreen);
     }
     if(drawbezierresult)
     {
-        drawWaveBezier(wave2, canvas, offsetX1, offsetY3, stepX, stepY, lineColor5, tension, drawpoint, pointColor5);
+        drawSignalBezier(sampled, canvas, offsetX1, offsetY3, stepX, stepY, colorLightBlue, tension, drawpoint, colorBlue);
         if (drawcompararison) 
         {
-            drawWave(wave1Copy, canvas, offsetX1, offsetY3, stepX, stepY, lineColor1);
+            drawSignal(originalCopy, canvas, offsetX1, offsetY3, stepX, stepY, colorRed);
         }
     }
     window.requestAnimationFrame(drawAll);
 }
 
 /**
- * Sampling wave
- * @param {object} wave Wave
+ * Sampling signal
+ * @param {object} signal Signal to be sampled
  * @param {number} lResolution Resolution 
  * @param {number} lRatio Sampling ratio
  */
-function sampling(wave, lResolution, lRatio)
+function sampling(signal, lResolution, lRatio)
 {
     var result = [];
-    var max = wave.length;
+    var max = signal.length;
     var step = Math.round(lResolution/lRatio);
     for(var i = 0; i<=max; i+=step)
     {
-        if(typeof wave[i] != 'undefined')
+        if(typeof signal[i] != 'undefined')
         {
-            result.push(wave[i]);
+            result.push(signal[i]);
         }
     }
     return result;
 }
 /**
- * Create wave data
+ * Create signal data
+ * @param {number} lAmplitude Aplitude
  * @param {number} lPeriod Period
  * @param {number} lPhase Phase
  * @param {number} lResolution Resolution
  */
-function createWave(lPeriod, lPhase, lResolution)
+function createSignal(lAmplitude, lPeriod, lPhase, lResolution)
 {
     /**
      * y = sin(x + a)
@@ -179,15 +256,61 @@ function createWave(lPeriod, lPhase, lResolution)
     {
         var v = i * Math.PI * 2 / lResolution;
         var x = v + a;
-        value = Math.sin(x);
+        value = Math.sin(x) * lAmplitude;
         result.push({x:i, y:value});
     }
     return result;
 }
 
 /**
+ * Combine signal
+ * @param {object} signal1 Wave 1
+ * @param {object} signal2 Wave 2
+ * @returns Combination of Wave 1 and Wave 2
+ */
+function combineSignal(signal1, signal2)
+{
+    if(signal1.length > signal2.length)
+    {
+        return addSignal(signal1, signal2);
+    }
+    else
+    {
+        return addSignal(signal2, signal1);
+    }
+}
+
+/**
+ * Add signal
+ * @param {object} signal1 Wave 1
+ * @param {object} signal2 Wave 2
+ * @returns Combination of Wave 1 and Wave 2
+ */
+function addSignal(signal1, signal2)
+{
+    var max1 = signal1.length;
+    var max2 = signal2.length;
+    var y = 0;
+    var i;
+    var result = [];
+    for(i = 0; i<max1; i++)
+    {
+        if(i < max2)
+        {
+            y = signal1[i].y + signal2[i].y;
+        }
+        else
+        {
+            y = signal1[i].y;
+        }
+        result.push({x:signal1[i].x, y:y});
+    }
+    return result;
+}
+
+/**
  * Draw signal
- * @param {object} wave Wave
+ * @param {object} signal Signal
  * @param {object} lCanvas Canvas
  * @param {number} offsetX Offset X
  * @param {number} offsetY Offset Y
@@ -195,25 +318,25 @@ function createWave(lPeriod, lPhase, lResolution)
  * @param {number} lStepY Step Y
  * @param {string} lineColor Line color
  */
-function drawWave(wave, lCanvas, offsetX, offsetY, lStepX, lStepY, lineColor, drawPoint, lPointColor)
+function drawSignal(signal, lCanvas, offsetX, offsetY, lStepX, lStepY, lineColor, drawPoint, lPointColor)
 {
     if(drawPoint)
     {
-        drawPoints(wave, lCanvas, offsetX, offsetY, lStepX, lStepY, lPointColor);
+        drawPoints(signal, lCanvas, offsetX, offsetY, lStepX, lStepY, lPointColor);
     }
-    if(wave.length > 1)
+    if(signal.length > 1)
     {
-        var length = wave.length;
+        var length = signal.length;
         var ctx = lCanvas.getContext('2d');
         ctx.beginPath();
         ctx.strokeStyle = lineColor;
         var x = offsetX;
-        var y = offsetY - (wave[0].y * lStepY);
+        var y = offsetY - (signal[0].y * lStepY);
         ctx.moveTo(x, y);
         for(var i = 1; i<length; i++)
         {
-            x = offsetX + (wave[i].x * lStepX);
-            y = offsetY - (wave[i].y * lStepY);     
+            x = offsetX + (signal[i].x * lStepX);
+            y = offsetY - (signal[i].y * lStepY);     
             ctx.lineTo(x, y);
         }
         ctx.stroke(); 
@@ -222,7 +345,7 @@ function drawWave(wave, lCanvas, offsetX, offsetY, lStepX, lStepY, lineColor, dr
 
 /**
  * Draw signal with Bezier
- * @param {object} wave Wave
+ * @param {object} signal Signal
  * @param {object} lCanvas Canvas
  * @param {number} offsetX Offset X
  * @param {number} offsetY Offset Y
@@ -233,36 +356,36 @@ function drawWave(wave, lCanvas, offsetX, offsetY, lStepX, lStepY, lineColor, dr
  * @param {boolean} drawPoint Draw point
  * @param {string} lPointColor Point color
  */
-function drawWaveBezier(wave, lCanvas, offsetX, offsetY, lStepX, lStepY, lineColor, lTension, drawPoint, lPointColor) 
+function drawSignalBezier(signal, lCanvas, offsetX, offsetY, lStepX, lStepY, lineColor, lTension, drawPoint, lPointColor) 
 {
     if(drawPoint)
     {
-        drawPoints(wave, lCanvas, offsetX, offsetY, lStepX, lStepY, lPointColor);
+        drawPoints(signal, lCanvas, offsetX, offsetY, lStepX, lStepY, lPointColor);
     }
-    if(wave.length > 1)
+    if(signal.length > 1)
     {
-        var length = wave.length;
+        var length = signal.length;
         var ctx = lCanvas.getContext('2d');
         ctx.beginPath();
         ctx.strokeStyle = lineColor;
         var x = offsetX;
-        var y = offsetY - (wave[0].y * lStepY);
+        var y = offsetY - (signal[0].y * lStepY);
         ctx.moveTo(x, y);
         var t = (lTension != null) ? lTension : 1;
         var i;
         for(i = 0; i<length; i++)
         {
-            x = offsetX + (wave[i].x * lStepX);
-            y = offsetY - (wave[i].y * lStepY); 
-            wave[i].x = x;
-            wave[i].y = y;
+            x = offsetX + (signal[i].x * lStepX);
+            y = offsetY - (signal[i].y * lStepY); 
+            signal[i].x = x;
+            signal[i].y = y;
         }
         for (i = 0; i < length - 1; i++) 
         {
-            var p0 = (i > 0) ? wave[i - 1] : wave[0];
-            var p1 = wave[i];
-            var p2 = wave[i + 1];
-            var p3 = (i != length - 2) ? wave[i + 2] : p2;
+            var p0 = (i > 0) ? signal[i - 1] : signal[0];
+            var p1 = signal[i];
+            var p2 = signal[i + 1];
+            var p3 = (i != length - 2) ? signal[i + 2] : p2;
 
             var cp1x = p1.x + (p2.x - p0.x) / 6 * t;
             var cp1y = p1.y + (p2.y - p0.y) / 6 * t;
@@ -278,7 +401,7 @@ function drawWaveBezier(wave, lCanvas, offsetX, offsetY, lStepX, lStepY, lineCol
 
 /**
  * Draw points
- * @param {object} wave Wave
+ * @param {object} signal Signal
  * @param {object} lCanvas Canvas
  * @param {number} offsetX Offset X
  * @param {number} offsetY Offset Y
@@ -286,18 +409,18 @@ function drawWaveBezier(wave, lCanvas, offsetX, offsetY, lStepX, lStepY, lineCol
  * @param {number} lStepY Step Y
  * @param {string} lPointColor Point color
  */
-function drawPoints(wave, lCanvas, offsetX, offsetY, lStepX, lStepY, lPointColor)
+function drawPoints(signal, lCanvas, offsetX, offsetY, lStepX, lStepY, lPointColor)
 {
-    if(wave.length > 1)
+    if(signal.length > 1)
     {
-        var length = wave.length;
+        var length = signal.length;
         var x = offsetX;
-        var y = offsetY - (wave[0].y * lStepY);
+        var y = offsetY - (signal[0].y * lStepY);
         drawCoordinates(lCanvas, x, y, lPointColor);
         for(var i = 1; i<length; i++)
         {
-            x = offsetX + (wave[i].x * lStepX);
-            y = offsetY - (wave[i].y * lStepY);     
+            x = offsetX + (signal[i].x * lStepX);
+            y = offsetY - (signal[i].y * lStepY);     
             drawCoordinates(lCanvas, x, y, lPointColor);
         }
     }
@@ -322,7 +445,7 @@ function drawCoordinates(lCanvas, x, y, lPointColor)
 
 /**
  * Draw sampler
- * @param {object} wave Wave
+ * @param {object} signal Signal
  * @param {object} lCanvas Canvas
  * @param {number} offsetX Offset X
  * @param {number} offsetY Offset Y
@@ -332,12 +455,12 @@ function drawCoordinates(lCanvas, x, y, lPointColor)
  * @param {string} lLineColor2 Line color 2 to drav horizontal line
  * @param {boolean} unsignedData Unsigned sample value
  */
-function sampler(wave, lCanvas, offsetX, offsetY, lStepX, lStepY, lLineColor1, lLineColor2, unsignedData)
+function sampler(signal, lCanvas, offsetX, offsetY, lStepX, lStepY, lLineColor1, lLineColor2, unsignedData)
 {
-    var length = wave.length;
+    var length = signal.length;
     var ctx = lCanvas.getContext('2d');
     var x = offsetX;
-    var y = offsetY - (wave[0].y * lStepY);
+    var y = offsetY - (signal[0].y * lStepY);
     var i;
     if(unsignedData)
     {
@@ -345,8 +468,8 @@ function sampler(wave, lCanvas, offsetX, offsetY, lStepX, lStepY, lLineColor1, l
         ctx.strokeStyle = lLineColor1;
         for(i = 0; i<length; i++)
         {
-            x = offsetX + (wave[i].x * lStepX);
-            y = offsetY - (wave[i].y * lStepY);     
+            x = offsetX + (signal[i].x * lStepX);
+            y = offsetY - (signal[i].y * lStepY);     
             ctx.moveTo(x, offsetY+lStepY);
             ctx.lineTo(x, y);
         }
@@ -365,8 +488,8 @@ function sampler(wave, lCanvas, offsetX, offsetY, lStepX, lStepY, lLineColor1, l
         ctx.strokeStyle = lLineColor1;
         for(i = 0; i<length; i++)
         {
-            x = offsetX + (wave[i].x * lStepX);
-            y = offsetY - (wave[i].y * lStepY);     
+            x = offsetX + (signal[i].x * lStepX);
+            y = offsetY - (signal[i].y * lStepY);     
             ctx.moveTo(x, offsetY);
             ctx.lineTo(x, y);
         }
@@ -442,6 +565,41 @@ window.onload = function()
         setState('unsigned', unsigned);
     });
 
+    drawsignal1 = getState('drawsignal1', drawsignal1);
+    document.querySelector('#drawsignal1').addEventListener('change', function(e){
+        drawsignal1 = e.target.checked;
+        setState('drawsignal1', drawsignal1);
+    });
+
+    drawsignal2 = getState('drawsignal2', drawsignal2);
+    document.querySelector('#drawsignal2').addEventListener('change', function(e){
+        drawsignal2 = e.target.checked;
+        setState('drawsignal2', drawsignal2);
+    });
+
+    selectedsource = getValue('selectedsource', selectedsource);
+    document.querySelector('#selectedsource').addEventListener('change', function(e){
+        selectedsource = e.target.value;
+        setValue('selectedsource', selectedsource);
+        if(selectedsource == 'main')
+        {
+            amplitude1 = 1;
+        }
+        else
+        {
+            amplitude1 = 0.7;
+        }
+    });
+    if(selectedsource == 'main')
+    {
+        amplitude1 = 1;
+    }
+    else
+    {
+        amplitude1 = 0.7;
+    }
+
+
     drawori = getState('drawori', drawori);
     document.querySelector('#drawori').addEventListener('change', function(e){
         drawori = e.target.checked;
@@ -478,13 +636,12 @@ window.onload = function()
         setState('drawcompararison', drawcompararison);
     });
 
-
-    var value1 = 180 * phase / Math.PI;  
+    var value1 = 180 * phase1 / Math.PI;  
     document.querySelector('#phase').value = value1;
     document.querySelector('#phase').closest('.control-wrapper').querySelector('.value').innerHTML = ' ('+value1+')';
     document.querySelector('#phase').addEventListener('change', function(e){
         var value = parseFloat(e.target.value);
-        phase = Math.PI*value/180;
+        phase1 = Math.PI*value/180;
         e.target.closest('.control-wrapper').querySelector('.value').innerHTML = ' ('+value+')';
     });
     var value2 = ratio;
@@ -495,7 +652,7 @@ window.onload = function()
         ratio = value;
         e.target.closest('.control-wrapper').querySelector('.value').innerHTML = ' ('+value+')';
         calcSamplingRate();
-        calcFile();
+        calculateFile();
     });
 
     var value3 = tension;
@@ -510,25 +667,25 @@ window.onload = function()
     document.querySelector('#maximum-frequency').addEventListener('change', function(e){
         validateValue(e.target);
         calcSamplingRate();
-        calcFile();
+        calculateFile();
     });
     document.querySelector('#duration').addEventListener('change', function(e){
-        calcFile();
+        calculateFile();
     });
     document.querySelector('#bit-depth').addEventListener('change', function(e){
         validateValue(e.target);
-        calcFile();
+        calculateFile();
     });
     document.querySelector('#number-of-channel').addEventListener('change', function(e){
         validateValue(e.target);
-        calcFile();
+        calculateFile();
     });
     document.querySelector('#sampling-rate').addEventListener('change', function(e){
         validateValue(e.target);
-        calcFile();
+        calculateFile();
     });
     calcSamplingRate();
-    calcFile();
+    calculateFile();
     canvas = document.querySelector('#canvas1');
     drawAll();
 }
