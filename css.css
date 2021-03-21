@@ -36,7 +36,7 @@ body{
 .selector-area, .source-area{
     text-align: center;
     display: block;
-    padding: 5px 0;
+    padding: 2px 0;
 }
 .selector-area label, .source-area label{
     display: inline-block;
@@ -71,7 +71,7 @@ input[type="number"]:focus, input[type="number"]:active, select:focus select:act
     background-color: #FAFAFA;
 }
 .label{
-    padding: 4px 0px;
+    padding: 4px 0px 3px 0x;
 }
 
 .row {
@@ -82,9 +82,9 @@ input[type="number"]:focus, input[type="number"]:active, select:focus select:act
 
 .control-wrapper {
     position: relative;
-    padding: 8px 12px 12px 12px;
+    padding: 5px 10px 10px 10px;
     box-sizing: border-box;
-    margin-bottom: 12px;
+    margin-bottom: 5px;
     border-radius: 3px;
     background-color: #F4F4F4;
 }

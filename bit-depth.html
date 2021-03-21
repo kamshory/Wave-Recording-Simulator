@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -7,13 +8,14 @@
     <title>Wave Recording Simulator</title>
     <link rel="stylesheet" href="css.css">
     <link rel="stylesheet" href="menu.css">
-    <script src="js.js"></script>
+    <script src="bit-depth.js"></script>
 </head>
+
 <body>
     <div class="menu">
         <ul class="main-menu">
-            <li class="menu-item selected"><a href="./index.html">Home</a></li>
-            <li class="menu-item"><a href="./bit-depth.html">Bit Depth</a></li>
+            <li class="menu-item"><a href="./index.html">Home</a></li>
+            <li class="menu-item selected"><a href="./bit-depth.html">Bit Depth</a></li>
             <li class="menu-item"><a href="./signal.html">Draw Signal</a></li>
         </ul>
     </div>
@@ -26,52 +28,56 @@
             <div class="control-wrapper">
                 <div class="label">Analog Phase <span class="value"></span></div>
                 <div class="control"><input type="range" id="phase" min="0" max="720" step="1"></div>
-            </div>    
+            </div>
             <div class="control-wrapper">
                 <div class="label">Bezier Tension <span class="value"></span></div>
                 <div class="control"><input type="range" id="tension" min="0" max="1" step="0.01"></div>
-            </div>    
-        </div> 
+            </div>
+        </div>
         <div class="source-area">
-            <label for="drawsignal1"><input type="checkbox" name="drawsignal1" id="drawsignal1" value="1"> Main</label>  
-            <label for="drawsignal2"><input type="checkbox" name="drawsignal2" id="drawsignal2" value="1"> Noise</label>  
+            <label for="drawsignal1"><input type="checkbox" name="drawsignal1" id="drawsignal1" value="1"> Main</label>
+            <label for="drawsignal2"><input type="checkbox" name="drawsignal2" id="drawsignal2" value="1"> Noise</label>
             Source: <select name="selectedsource" id="selectedsource">
                 <option value="main">Main</option>
-                <option value="main07">Main (Max 0.7)</option>
-                <option value="noise03">Noise (Max 0.3)</option>
+                <option value="main07">Main (Max 0.65)</option>
+                <option value="noise03">Noise (Max 0.35)</option>
                 <option value="combination">Combination</option>
             </select>
         </div>
         <div class="selector-area">
-            <label for="unsigned"><input type="checkbox" name="unsigned" id="unsigned" value="1"> Unsigned</label>  
-            <label for="drawori"><input type="checkbox" name="drawori" id="drawori" value="1"> Original</label>  
-            <label for="drawsampling"><input type="checkbox" name="drawsampling" id="drawsampling" value="1"> Sampling</label>  
-            <label for="drawresult"><input type="checkbox" name="drawresult" id="drawresult" value="1"> Result</label>  
-            <label for="drawbezierresult"><input type="checkbox" name="drawbezierresult" id="drawbezierresult" value="1"> Bezier Result</label>      
-            <label for="drawcompararison"><input type="checkbox" name="drawcompararison" id="drawcompararison" value="1"> Comparison</label>      
-            <label for="drawpoint"><input type="checkbox" name="drawpoint" id="drawpoint" value="1"> Points</label>      
+            <label for="unsigned"><input type="checkbox" name="unsigned" id="unsigned" value="1"> Unsigned</label>
+            <label for="drawori"><input type="checkbox" name="drawori" id="drawori" value="1"> Original</label>
+            <label for="drawsampling"><input type="checkbox" name="drawsampling" id="drawsampling" value="1">
+                Sampling</label>
+            <label for="drawbezierresult"><input type="checkbox" name="drawbezierresult" id="drawbezierresult"
+                    value="1"> Bezier Result</label>
+            <label for="drawcompararison"><input type="checkbox" name="drawcompararison" id="drawcompararison"
+                    value="1"> Comparison</label>
+            <label for="drawpoint"><input type="checkbox" name="drawpoint" id="drawpoint" value="1"> Points</label>
         </div>
-          
+
         <canvas id="canvas1" width="100%" height="600"></canvas>
         <div class="row three-col">
             <div class="control-wrapper">
                 <div class="label">Maximum Frequency (Hz)</div>
-                <div class="control"><input type="number" id="maximum-frequency" value="20000" step="any" min="15" max="22000"></div>
+                <div class="control"><input type="number" id="maximum-frequency" value="20000" step="any" min="15"
+                        max="22000"></div>
             </div>
-                <div class="control-wrapper">
+            <div class="control-wrapper">
                 <div class="label">Sampling Rate (Hz)</div>
                 <div class="control"><input type="number" id="sampling-rate" step="any" min="60"></div>
             </div>
             <div class="control-wrapper">
                 <div class="label">Bit Depth (Bits)</div>
-                <div class="control"><input type="number" id="bit-depth" value="16" step="8" min="8" max="24"></div>
+                <div class="control"><input type="number" id="bit-depth" value="16" step="1" min="3" max="24"></div>
             </div>
         </div>
         <div class="row three-col">
             <div class="control-wrapper">
                 <div class="label">Number of Channel</div>
-                <div class="control"><input type="number" id="number-of-channel" value="2" step="1" min="1" max="64"></div>
-            </div>    
+                <div class="control"><input type="number" id="number-of-channel" value="2" step="1" min="1" max="64">
+                </div>
+            </div>
             <div class="control-wrapper">
                 <div class="label">Duration (Seconds)</div>
                 <div class="control"><input type="number" id="duration" value="300" step="any" min="0"></div>
@@ -79,9 +85,10 @@
             <div class="control-wrapper">
                 <div class="label">WAV File Size (Exclude Header)</div>
                 <div class="control"><input type="number" id="file-size" readonly></div>
-            </div>    
+            </div>
         </div>
     </div>
-    
+
 </body>
+
 </html>
