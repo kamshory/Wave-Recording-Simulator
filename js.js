@@ -26,15 +26,15 @@ var offsetY2 = 300;
 var offsetY3 = 500;
 var stepX = 1;
 var stepY = 80;
-var colorRed = '#EE0000';
-var colorGreen = '#22FF22';
-var colorDarkGreen = '#00DD00';
-var colorDarkBlue = '#0000DD';
-var colorLightBlue = '#2222FF';
-var colorBlue = '#0000EE';
-var colorBlack = '#222222';
-var colorGrey = '#999999';
-var colorBrown = '#CC5500';
+const RED = '#FF0000';
+const GREEN = '#008000';
+const DARK_GREEN = '#006400';
+const DARK_BLUE = '#00008B';
+const NAVY = '#000080';
+const BLUE = '#0000FF';
+const DARK_SLATE_GRAY = '#2F4F4F';
+const MEDIUM_ORCHID = '#BA55D3';
+const BROWN = '#A52A2A';
 
 var canvas;
 var unsigned = false;
@@ -186,31 +186,31 @@ function drawAll()
     var originalCopy = copySignal(original);
     if(drawsignal1)
     {
-        drawSignal(signal1, canvas, offsetX1, offsetY1, stepX, stepY, colorBrown);
+        drawSignal(signal1, canvas, offsetX1, offsetY1, stepX, stepY, BROWN);
     }
     if(drawsignal2)
     {
-        drawSignal(signal2, canvas, offsetX1, offsetY1, stepX, stepY, colorGrey);
+        drawSignal(signal2, canvas, offsetX1, offsetY1, stepX, stepY, MEDIUM_ORCHID);
     }
     if(drawori)
     {
-        drawSignal(original, canvas, offsetX1, offsetY1, stepX, stepY, colorRed);
+        drawSignal(original, canvas, offsetX1, offsetY1, stepX, stepY, RED);
     }
     if(drawsampling)
     {
-        sampler(sampled, canvas, offsetX1, offsetY1, stepX, stepY, colorDarkBlue, colorBlack, unsigned);
+        sampler(sampled, canvas, offsetX1, offsetY1, stepX, stepY, DARK_BLUE, DARK_SLATE_GRAY, unsigned);
     }
     if(drawresult)
     {
-        drawSignal(sampled, canvas, offsetX1, offsetY1, stepX, stepY, colorGreen);
-        drawSignal(sampled, canvas, offsetX1, offsetY2, stepX, stepY, colorGreen, drawpoint, colorDarkGreen);
+        drawSignal(sampled, canvas, offsetX1, offsetY1, stepX, stepY, GREEN);
+        drawSignal(sampled, canvas, offsetX1, offsetY2, stepX, stepY, GREEN, drawpoint, DARK_GREEN);
     }
     if(drawbezierresult)
     {
-        drawSignalBezier(sampled, canvas, offsetX1, offsetY3, stepX, stepY, colorLightBlue, tension, drawpoint, colorBlue);
+        drawSignalBezier(sampled, canvas, offsetX1, offsetY3, stepX, stepY, NAVY, tension, drawpoint, BLUE);
         if (drawcompararison) 
         {
-            drawSignal(originalCopy, canvas, offsetX1, offsetY3, stepX, stepY, colorRed);
+            drawSignal(originalCopy, canvas, offsetX1, offsetY3, stepX, stepY, RED);
         }
     }
     window.requestAnimationFrame(drawAll);
