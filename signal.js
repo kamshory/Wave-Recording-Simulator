@@ -4,7 +4,7 @@ var sample1 = [];
 var sample2 = [];
 var range1 = 0;
 var range2 = 0;
-var minMaxSignal = 120;
+var minMaxSignal = 200;
 function encodeData(buffer) {
     var result = [];
     for (var i in buffer) {
@@ -50,9 +50,33 @@ function draw() {
     var drawPoint = true;
     sample1 = getSample(data1, range1, range2);
     sample2 = getSample(data2, range1, range2);
+
+
+    drawGrid(canvas, 10, canvas.width - 10, offsetY2 - minMaxSignal, offsetY2 + minMaxSignal, 10, 10, '#999999');
+
     drawSignal(data1, canvas, offsetX, offsetY, lStepX, lStepY, lineColor1)
     drawSignalBezier(sample1, canvas, offsetX, offsetY2, lStepX, lStepY, lineColor2, bezierTension, drawPoint, lineColor2);
     window.requestAnimationFrame(draw);
+}
+
+function drawGrid(lCanvas, x1, x2, y1, y2, stepx, stepy, lineColor)
+{
+    var ctx = lCanvas.getContext('2d');
+    ctx.beginPath();
+    ctx.strokeStyle = lineColor;
+    var i;
+    for(i = x1; i <= x2; i += stepx)
+    {
+        ctx.moveTo(i, y1);
+        ctx.lineTo(i, y2);
+        document.title = [i, y1]
+    }
+    for(i = y1; i <= y2; i += stepy)
+    {
+        ctx.moveTo(x1, i);
+        ctx.lineTo(x2, i);
+    }
+    ctx.stroke();
 }
 
 /**
