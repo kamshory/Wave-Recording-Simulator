@@ -175,8 +175,6 @@ function drawCoordinates(lCanvas, x, y, lPointColor) {
     ctx.fill();
 }
 
-var range1 = 0;
-var range2 = 0;
 $(document).ready(function () {
     range1 = $('input[name="range1"]').val();
     range2 = $('input[name="range2"]').val();
