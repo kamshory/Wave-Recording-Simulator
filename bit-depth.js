@@ -23,7 +23,7 @@ var ratio = 2;
 var tension = 1;
 var amplitude1 = 1;
 var amplitude2 = 0.35;
-var amplitude3 = 0.65;
+var amplitude3 = 0.35;
 var offsetX1 = 10;
 var offsetY1 = 137;
 var offsetY3 = 444;
@@ -541,44 +541,7 @@ function validateValue(elem) {
 }
 
 window.onload = function () {
-    unsigned = getState('unsigned', unsigned);
-    document.querySelector('#unsigned').addEventListener('change', function (e) {
-        unsigned = e.target.checked;
-        setState('unsigned', unsigned);
-    });
-
-    drawsignal1 = getState('drawsignal1', drawsignal1);
-    document.querySelector('#drawsignal1').addEventListener('change', function (e) {
-        drawsignal1 = e.target.checked;
-        setState('drawsignal1', drawsignal1);
-    });
-
-    drawsignal2 = getState('drawsignal2', drawsignal2);
-    document.querySelector('#drawsignal2').addEventListener('change', function (e) {
-        drawsignal2 = e.target.checked;
-        setState('drawsignal2', drawsignal2);
-    });
-
-    selectedsource = getValue('selectedsource', selectedsource);
-    document.querySelector('#selectedsource').addEventListener('change', function (e) {
-        selectedsource = e.target.value;
-        setValue('selectedsource', selectedsource);
-        if (selectedsource == 'main') {
-            amplitude1 = 1;
-        }
-        else 
-        {
-            amplitude1 = amplitude3;
-        }
-    });
-    if (selectedsource == 'main') {
-        amplitude1 = 1;
-    }
-    else {
-        amplitude1 = 0.7;
-    }
-
-
+    
     drawori = getState('drawori', drawori);
     document.querySelector('#drawori').addEventListener('change', function (e) {
         drawori = e.target.checked;

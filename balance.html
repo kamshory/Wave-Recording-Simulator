@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wave Recording Simulator</title>
+    <link rel="stylesheet" href="css.css">
+    <link rel="stylesheet" href="menu.css">
+    <script src="balance.js"></script>
+</head>
+<body>
+    <div class="menu">
+        <ul class="main-menu">
+            <li class="menu-item"><a href="./index.html">Home</a></li>
+            <li class="menu-item"><a href="./bit-depth.html">Bit Depth</a></li>
+            <li class="menu-item selected"><a href="./balance.html">Balance</a></li>
+            <li class="menu-item"><a href="./signal.html">Draw Signal</a></li>
+        </ul>
+    </div>
+    <div class="page">
+        <div class="row">
+            <div class="control-wrapper">
+                <div class="label">Analog Phase <span class="value"></span></div>
+                <div class="control"><input type="range" id="phase" min="0" max="720" step="1"></div>
+            </div>    
+        </div> 
+        <div class="selector-area">
+            <label for="drawori"><input type="checkbox" name="drawori" id="drawori" value="1"> Original</label>  
+            <label for="draworiinverted"><input type="checkbox" name="draworiinverted" id="draworiinverted" value="1"> Original (Inverted)</label>  
+            <label for="drawnoise"><input type="checkbox" name="drawnoise" id="drawnoise" value="1"> Noise</label>  
+            <label for="drawtransmittedori"><input type="checkbox" name="drawtransmittedori" id="drawtransmittedori" value="1"> Transmitted</label>      
+            <label for="drawtransmittedinverted"><input type="checkbox" name="drawtransmittedinverted" id="drawtransmittedinverted" value="1"> Transmitted (Inverted)</label>      
+            <label for="drawtransmittednormal"><input type="checkbox" name="drawtransmittednormal" id="drawtransmittednormal" value="1"> Transmitted (Normal)</label>      
+            <label for="drawresult"><input type="checkbox" name="drawresult" id="drawresult" value="1"> Result</label>      
+        </div>
+          
+        <canvas id="canvas1" width="100%" height="840"></canvas>
+        
+    </div>
+    
+</body>
+</html>
