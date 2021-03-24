@@ -1,29 +1,22 @@
 var period1 = 8;
-var period2 = 11;
+var period2 = 22;
 var period3 = 15;
 var resolution1 = 256;
-var resolution2 = 186;
+var resolution2 = 93;
 var resolution3 = 137;
+var level = 1;
+var noiselevel = 0.5;
 
 /**
  * Phase for analog signal
  */
-var phase1 = Math.PI / 2;
+var phase1 = 0;
 var phase2 = Math.PI * 0.3;
 var phase3 = Math.PI * 1.8;
 
-/**
- * Ratio between sampling rate to highest analog frequency
- */
-var ratio = 2;
-
-/**
- * Tension to smooth wave
- */
-var tension = 1;
 var amplitude1 = 1;
 var amplitude2 = 0.3;
-var amplitude3 = 0.73;
+var amplitude3 = 0.7;
 var offsetX1 = 10;
 var offsetY1 = 50;
 var offsetY2 = 150;
@@ -164,9 +157,9 @@ function drawAll() {
     /**
      * Original signal
      */
-    var original = createSignal(amplitude1, period1, phase1, resolution1);
-    var noise1 = createSignal(amplitude2, period2, phase2, resolution2);
-    var noise2 = createSignal(amplitude2, period3, phase3, resolution3);
+    var original = createSignal(amplitude1 * level, period1, phase1, resolution1);
+    var noise1 = createSignal(amplitude2 * noiselevel, period2, phase2, resolution2);
+    var noise2 = createSignal(amplitude3 * noiselevel, period3, phase3, resolution3);
     /**
      * Noise
      */
@@ -362,15 +355,41 @@ window.onload = function () {
         setState('drawresult', drawresult);
     });
 
+    phase1 = getValue('phase', phase1);
 
-    var value1 = 180 * phase1 / Math.PI;
+    var value1 = getValue('phase', phase1);
     document.querySelector('#phase').value = value1;
     document.querySelector('#phase').closest('.control-wrapper').querySelector('.value').innerHTML = ' (' + value1 + ')';
     document.querySelector('#phase').addEventListener('change', function (e) {
         var value = parseFloat(e.target.value);
+        setValue('phase', value);
         phase1 = Math.PI * value / 180;
         e.target.closest('.control-wrapper').querySelector('.value').innerHTML = ' (' + value + ')';
     });
+    phase1 = Math.PI * value1 / 180;
+
+    level = getValue('level', level);
+    var value2 = level;
+    document.querySelector('#level').value = level;
+    document.querySelector('#level').closest('.control-wrapper').querySelector('.value').innerHTML = ' (' + value2 + ')';
+    document.querySelector('#level').addEventListener('change', function (e) {
+        var value = parseFloat(e.target.value);
+        level = value;
+        setValue('level', level);
+        e.target.closest('.control-wrapper').querySelector('.value').innerHTML = ' (' + value + ')';
+    });
+
+    noiselevel = getValue('noiselevel', noiselevel);
+    var value3 = noiselevel;
+    document.querySelector('#noiselevel').value = noiselevel;
+    document.querySelector('#noiselevel').closest('.control-wrapper').querySelector('.value').innerHTML = ' (' + value3 + ')';
+    document.querySelector('#noiselevel').addEventListener('change', function (e) {
+        var value = parseFloat(e.target.value);
+        noiselevel = value;
+        setValue('noiselevel', noiselevel);
+        e.target.closest('.control-wrapper').querySelector('.value').innerHTML = ' (' + value + ')';
+    });
+
     
     
     canvas = document.querySelector('#canvas1');

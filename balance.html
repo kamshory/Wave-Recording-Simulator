@@ -19,10 +19,18 @@
         </ul>
     </div>
     <div class="page">
-        <div class="row">
+        <div class="row three-col">
             <div class="control-wrapper">
                 <div class="label">Analog Phase <span class="value"></span></div>
                 <div class="control"><input type="range" id="phase" min="0" max="720" step="1"></div>
+            </div>    
+            <div class="control-wrapper">
+                <div class="label">Signal Level <span class="value"></span></div>
+                <div class="control"><input type="range" id="level" min="0" max="1" step="0.01"></div>
+            </div>    
+            <div class="control-wrapper">
+                <div class="label">Noise Level <span class="value"></span></div>
+                <div class="control"><input type="range" id="noiselevel" min="0" max="1" step="0.01"></div>
             </div>    
         </div> 
         <div class="selector-area">

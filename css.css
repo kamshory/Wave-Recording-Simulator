@@ -74,7 +74,7 @@ input[type="number"]:focus, input[type="number"]:active, select:focus select:act
     padding: 4px 0px 3px 0x;
 }
 
-.three-col {
+.two-col, .three-col {
     display:flex;
     flex-direction:row;
     justify-content: space-between;
