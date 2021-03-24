@@ -53,7 +53,6 @@ function draw() {
 
 
     drawGrid(canvas, 10, canvas.width - 10, offsetY2 - minMaxSignal, offsetY2 + minMaxSignal, 10, 10, '#999999');
-
     drawSignal(data1, canvas, offsetX, offsetY, lStepX, lStepY, lineColor1)
     drawSignalBezier(sample1, canvas, offsetX, offsetY2, lStepX, lStepY, lineColor2, bezierTension, drawPoint, lineColor2);
     window.requestAnimationFrame(draw);
@@ -69,7 +68,6 @@ function drawGrid(lCanvas, x1, x2, y1, y2, stepx, stepy, lineColor)
     {
         ctx.moveTo(i, y1);
         ctx.lineTo(i, y2);
-        document.title = [i, y1]
     }
     for(i = y1; i <= y2; i += stepy)
     {
