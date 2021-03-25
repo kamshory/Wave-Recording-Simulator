@@ -94,3 +94,7 @@ input[type="number"]:focus, input[type="number"]:active, select:focus select:act
 .three-col .control-wrapper{
     width: 32%;
 }
+.image-area{
+    text-align: center;
+    padding: 20px 0;
+}
