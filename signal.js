@@ -4,7 +4,7 @@ var sample1 = [];
 var sample2 = [];
 var range1 = 0;
 var range2 = 0;
-var minMaxSignal = 200;
+var minMaxSignal = 100;
 function encodeData(buffer) {
     var result = [];
     for (var i in buffer) {
@@ -17,7 +17,7 @@ function initMedia() {
     navigator.mediaDevices.getUserMedia(constraints)
         .then(function (stream) {
             var audioContext = new AudioContext();
-            var scriptNode = audioContext.createScriptProcessor(1024, 1, 1);
+            var scriptNode = audioContext.createScriptProcessor(1024, 2, 2);
             var source = audioContext.createMediaStreamSource(stream);
             source.connect(scriptNode);
             scriptNode.connect(audioContext.destination);
@@ -40,8 +40,10 @@ function draw() {
     var ctx = canvas.getContext('2d');
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     var offsetX = 10;
-    var offsetY = minMaxSignal + 10;
+    var offsetY1 = minMaxSignal + 10;
     var offsetY2 = (minMaxSignal * 3) + 20;
+    var offsetY3 = (minMaxSignal * 5) + 20;
+    var offsetY4 = (minMaxSignal * 7) + 20;
     var lStepX = 1;
     var lStepY = 1;
     var lineColor1 = '#009900';
@@ -51,10 +53,11 @@ function draw() {
     sample1 = getSample(data1, range1, range2);
     sample2 = getSample(data2, range1, range2);
 
-
-    drawGrid(canvas, 10, canvas.width - 10, offsetY2 - minMaxSignal, offsetY2 + minMaxSignal, 10, 10, '#999999');
-    drawSignal(data1, canvas, offsetX, offsetY, lStepX, lStepY, lineColor1)
-    drawSignalBezier(sample1, canvas, offsetX, offsetY2, lStepX, lStepY, lineColor2, bezierTension, drawPoint, lineColor2);
+    drawGrid(canvas, 10, canvas.width - 10, offsetY3 - minMaxSignal, offsetY4 + minMaxSignal, 10, 10, '#999999');
+    drawSignal(data1, canvas, offsetX, offsetY1, lStepX, lStepY, lineColor1)
+    drawSignal(data2, canvas, offsetX, offsetY2, lStepX, lStepY, lineColor2)
+    drawSignalBezier(sample1, canvas, offsetX, offsetY3, lStepX, lStepY, lineColor2, bezierTension, drawPoint, lineColor1);
+    drawSignalBezier(sample2, canvas, offsetX, offsetY4, lStepX, lStepY, lineColor2, bezierTension, drawPoint, lineColor2);
     window.requestAnimationFrame(draw);
 }
 
@@ -204,36 +207,36 @@ $(document).ready(function () {
     $('.range_min').html(range1);
     $('.range_max').html(range2);
 
-
     $('input[type="range"]').on('input', rangeInputChangeEventHandler);
     initMedia();
     draw();
 })
 
-function resample(data, range1, range2, scale) {
-    var data2 = [];
-    if (data.length > 0) {
+function resample(input, lRange1, lRange2, scale) {
+    var output = [];
+    if (input.length > 0) {
         var i = 0;
         var j = 0;
         var k = 0;
-        for (i = range1, j = 0; i < range2; i++, j++) {
+        for (i = lRange1; i < lRange2; i++, j++) {
             k = j * scale;
-            data2[j] = { x: k, y: data[i].y };
+            output[j] = { x: k, y: input[i].y };
         }
     }
-    return data2;
+    return output;
 }
-function getSample(data, range1, range2) {
-    var v1 = range1;
-    var v2 = range2;
+
+function getSample(input, lRange1, lRange2) {
+    var v1 = lRange1;
+    var v2 = lRange2;
     if (v1 > v2) {
-        range1 = v2;
-        range2 = v1;
+        lRange1 = v2;
+        lRange2 = v1;
     }
-    var r1 = data.length;
-    var r2 = range2 - range1;
+    var r1 = input.length;
+    var r2 = lRange2 - lRange1;
     var scale = Math.round(r1 / r2);
-    return resample(data, range1, range2, scale);
+    return resample(input, lRange1, lRange2, scale);
 }
 
 function addSeparator(nStr) {
@@ -249,7 +252,6 @@ function addSeparator(nStr) {
 }
 
 function rangeInputChangeEventHandler(e) {
-    var rangeGroup = $(this).attr('name');
     var minBtn = $(this).parent().children('.min');
     var maxBtn = $(this).parent().children('.max');
     var range_min = $(this).parent().children('.range_min');

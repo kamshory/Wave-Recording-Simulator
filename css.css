@@ -59,7 +59,7 @@ input[type="number"], select{
     background-color: #FFFFFF;
     transition: all ease-in-out 0.24s;
 }
-input[type="number"]:focus, input[type="number"]:active, select:focus select:active{
+input[type="number"]:focus, input[type="number"]:active, select:focus, select:active{
     outline: none;  
     box-shadow: 0px 0px 3px #DDDDDD;  
     background-color: #FFFFFF;
